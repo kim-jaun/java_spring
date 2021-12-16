@@ -10,7 +10,7 @@
 	// location.href="gugu";
 	// location.href="colorForm";
 	location.href="guguForm";
-// 	location.href="memberForm";
+	// location.href="memberForm";
 </script>
 </body>
 </html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="empns">
+	<resultMap type="emp" 			id="empResult">
+		<id property="empno" 		column="empno"/>
+		<result property="ename" 	column="ename"/>
+		<result property="job" 		column="job"/>
+		<result property="mgr" 		column="mgr"/>
+		<result property="hiredate" column="hiredate"/>
+		<result property="sal" 		column="sal"/>
+		<result property="comm" 	column="comm"/>
+		<result property="deptno" 	column="deptno"/>
+		<!-- 관리자 이름 -->
+		<result property="mgrName" 	column="mgrName"/>
+		<!-- 조인용 부서정보 가져올 때 -->
+		<collection property="dept" resultMap="deptResult"></collection>
+	</resultMap>
+	<!-- table의 column명과 class의 속성명이 다른 경우에 사용 -->	
+	<resultMap type="dept" 			id="deptResult">
+		<!-- property class의 속성, column는 테이블의 컬럼명  -->
+		<result property="deptno" 	column="deptno"/>
+		<result property="dname" 	column="dname"/>
+		<result property="loc" 	column="loc"/>
+	</resultMap>	
+	<select id="list" parameterType="integer" resultType="emp">
+		select * from emp where deptno=#{deptno} order by ename
+	</select>
+</mapper>
