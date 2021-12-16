@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>		
+		<typeAlias alias="board" 		type="model.Board" />
+		<typeAlias alias="shortboard"	type="model.ShortBoard" />
+		<typeAlias alias="campsite"		type="model.CampSite" />
+		<typeAlias alias="loc"			type="model.Loc" />
+		<typeAlias alias="product"		type="model.Product" />	
+		<typeAlias alias="member"		type="model.Member" />	
+		<typeAlias alias="sale"			type="model.Sale" />	
+		<typeAlias alias="saleline" 	type="model.SaleLine" />
+	</typeAliases>
+	<mappers>
+		<mapper resource="mybatis/Board.xml" />
+		<mapper resource="mybatis/ShortBoard.xml" />
+		<mapper resource="mybatis/CampSite.xml" />
+		<mapper resource="mybatis/Loc.xml" />	
+		<mapper resource="mybatis/Product.xml"/>
+		<mapper resource="mybatis/Member.xml"/>				
+		<mapper resource="mybatis/Sale.xml" />	
+		<mapper resource="mybatis/SaleLine.xml" />
+	</mappers>
+</configuration>

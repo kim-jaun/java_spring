@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">	
+<mapper namespace="Member">
+	<resultMap  type="member" 		id="ResultMap">
+		<result property="mId" 	  	column="mId"/>
+		<result property="password"	column="password"/>
+		<result property="mName"   	column="mName"/>
+		<result property="postcode" column="postcode"/>
+		<result property="address" 	column="address" />
+		<result property="email"	column="email"/>
+		<result property="job"   	column="job"/>
+	</resultMap>		
+	<select id="memberList"  parameterType="int" resultMap="ResultMap" >		
+		<![CDATA[ SELECT * FROM 
+				(SELECT ROWNUM RN, N.* FROM 
+					(SELECT * FROM MEMBERc ORDER BY mId DESC) N
+				) WHERE RN BETWEEN 1 + (#{start}-1)*10 AND 10 + (#{start}-1)*10 ]]>
+	</select>	
+	<select id="selectMember" resultType="member">		
+		<![CDATA[ SELECT * FROM MEMBERc WHERE MID=#{mId}]]>
+	</select>	
+	<select id="selectmId" resultType="String">		
+		<![CDATA[ SELECT MID FROM MEMBERc WHERE MID=#{mId}]]>
+	</select>	
+	<select id="getTotalMember" resultType="Integer">
+		<![CDATA[ SELECT COUNT(*) FROM MEMBERc ]]>
+	</select>	
+	<select id="selectMemberBymIdandPassword" parameterType="hashmap" resultType="member">
+		SELECT * FROM MEMBERc WHERE MID=#{mId} AND PASSWORD=#{password}
+	</select>	
+	<insert id="createMember" parameterType="member" >
+		<![CDATA[ INSERT INTO MEMBERc(MID, PASSWORD, MNAME, POSTCODE, ADDRESS, EMAIL, JOB)
+					VALUES(#{mId}, #{password}, #{mName}, #{postcode}, #{address}, #{email}, #{job})]]>
+	</insert>	
+	<update id="updateMember" parameterType="member">
+		<![CDATA[ UPDATE MEMBERc SET PASSWORD=#{password}, MNAME=#{mName}, POSTCODE=#{postcode}, ADDRESS=#{address}, EMAIL=#{email}, JOB=#{job}
+					WHERE MID=#{mId}]]>
+	</update>	
+	<delete id="deleteMember" parameterType="Integer">
+		<![CDATA[ DELETE FROM MEMBERc WHERE MID=#{mId} ]]>
+	</delete>	
+</mapper>
