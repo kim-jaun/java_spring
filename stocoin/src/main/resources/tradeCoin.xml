@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tradeCoinns">
+	
+	<insert id="insert" parameterType="tradeCoin">
+		<selectKey order="BEFORE" keyProperty="tc_no" resultType="integer">
+			select nvl(max(tc_no), 0) + 1 tc_no from tradeCoin where mno = #{mno}
+		</selectKey>
+		insert into tradeCoin values
+		(#{mno}, #{tc_no}, #{cname}, #{cname_ko}, #{types}, sysdate, #{cnt}, #{contract})
+	</insert>
+
+	<delete id="delete" parameterType="integer">
+		delete from tradeCoin where mno = #{mno}
+	</delete>
+
+	<select id="avgContract" parameterType="hashmap" resultType="integer">
+		select avg(contract) from tradeCoin where mno = #{mno} and cname = #{cname} and types = 1
+	</select>
+	
+	<select id="tradeList" parameterType="integer" resultType="tradeCoin">
+		select * from tradeCoin where mno = #{mno} order by dates desc
+	</select>
+
+</mapper>

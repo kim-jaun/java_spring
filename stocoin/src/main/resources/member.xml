@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberns">
+	<insert id="insert" parameterType="hashmap">
+		<selectKey order="BEFORE" keyProperty="mno" resultType="integer">
+			select nvl(max(mno), 0) + 1 mno from member
+		</selectKey>
+		insert into member values (#{mno}, #{id}, '.', sysdate, 3000000, 3000000, 'n')
+	</insert>
+	
+	<select id="select" parameterType="string" resultType="member">
+		select * from member where id=#{id}
+	</select>
+	
+	<update id="delete" parameterType="string">
+		update member set del='y', coin_money=3000000, stock_money=3000000 where id=#{id}
+	</update>
+	
+	<update id="updateDel" parameterType="hashmap">
+		update member set del='n', nick='.' where id=#{id}
+	</update>
+	
+	<update id="update" parameterType="string">
+		update member set nick=#{nick} where id=#{id}
+	</update>
+	
+	<select id="list" resultType="member" parameterType="member">
+		select * from (select rownum rn, a.* from (select * from member order by mno desc) a) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<select id="getTotal" resultType="integer">
+		select count(*) from member
+	</select>
+	   
+	<select id="nickChk" parameterType="string" resultType="member">
+		select * from member where nick=#{nick}
+	</select>
+   
+	<update id="updateStockMoney" parameterType="member">
+		update member set stock_money = #{stock_money} where id = #{id}
+	</update>
+	
+	<update id="updateCoinMoney" parameterType="member">
+		update member set coin_money = #{coin_money} where id = #{id}
+	</update>
+	
+	<update id="updateAllStock">
+		update member set stock_money = stock_money + 3000000
+	</update>
+	
+	<update id="updateAllCoin">
+		update member set coin_money = coin_money + 3000000
+	</update>
+	
+	<update id="resetMoney">
+		update member set coin_money = 3000000, stock_money = 3000000
+	</update>
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vehiclens">
+	<!-- 차량 목록 -->
+	<select id="list" parameterType="integer" resultType="vehicle">
+		select * from vehicle where MB_num=#{MB_num} order by VH_num
+	</select>
+	
+	<!-- 차량 중복확인 -->
+	<select id="select" parameterType="string" resultType="vehicle">
+		select * from vehicle where VH_carNum=#{VH_carNum} and VH_del='N'
+	</select>
+	
+	<!-- 차량 등록 -->
+	<insert id="insert" parameterType="vehicle">
+		insert into vehicle(VH_num, VH_carNum, VH_carName, VH_carYear, VH_carType, VH_km, VH_insu, VH_carPicture, MB_num)
+					values((select nvl(max(VH_num), 0)+1 from vehicle), #{VH_carNum}, #{VH_carName}, #{VH_carYear}, #{VH_carType}, #{VH_km}, #{VH_insu}, #{VH_carPicture}, #{MB_num})
+	</insert>
+	
+	<!-- 차량 상세보기 -->
+	<select id="selectNum" parameterType="integer" resultType="vehicle">
+		select * from vehicle where VH_num=#{VH_num}
+	</select>
+	
+	<!-- 차량 삭제 -->
+	<update id="delete" parameterType="integer">
+		update vehicle set VH_del='Y' where VH_num=#{VH_num}
+	</update>
+	
+	<!-- 회원 탈퇴 시 모든 차량 정보 삭제 -->
+	<update id="deleteAll" parameterType="integer">
+		update vehicle set VH_del='Y' where MB_num=#{MB_num}
+	</update>
+	
+	<!-- 관리자가 거절 시 동일 차량 등록을 할 수 있게 차량 삭제 -->
+	<delete id="deleteVh" parameterType="integer">
+		delete from vehicle where MB_num=#{MB_num}
+	</delete>
+	
+	<!-- 관리자가 드라이버 승인View에서 드라이버의 최초 차량 정보만 조회 -->
+	<select id="selectVh" parameterType="integer" resultType="vehicle">
+		<!-- select min(VH_num) from vehicle where MB_num=#{MB_num} and VH_del='N' -->
+		select * from vehicle where VH_num = (select min(VH_num) from vehicle where MB_num=#{MB_num})
+	</select>
+	
+	<!-- 관리자가 회원 복구 시 회원 차량 정보도 모두 복구 -->
+	<update id="rollbackAll" parameterType="integer">
+		update vehicle set VH_del='N' where MB_num=#{MB_num}
+	</update>
+	
+	<!-- 관리자가 삭제된 차량정보 복구 -->
+	<update id="adminVhRollback" parameterType="integer">
+		update vehicle set VH_del='N' where VH_num=#{VH_num}
+	</update>
+</mapper>

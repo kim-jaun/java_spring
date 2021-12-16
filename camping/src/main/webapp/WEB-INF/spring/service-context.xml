@@ -56,6 +56,7 @@
 	<bean id="session" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
+	
 	<!-- ExceptionHandler -->
 <!-- 	<bean id="exceptionHandler"
 		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">

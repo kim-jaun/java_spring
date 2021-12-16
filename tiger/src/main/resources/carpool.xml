@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="carpoolns">
+	
+	<insert id="insert" parameterType="carpool">
+		insert into CARPOOL
+		(CP_num,CP_regDate,CP_startPoint,CP_endPoint,CP_startDate,CP_startTime,CP_fee,
+		CP_passNum,CP_passNumNow,CP_gendertype,CP_option,CP_duration,CP_comment,CP_del,MB_num)
+		values(#{CP_num},sysdate, #{CP_startPoint}, #{CP_endPoint}, #{CP_startDate}, #{CP_startTime}, #{CP_fee}, #{CP_passNum}, 0,
+		#{CP_gendertype},#{CP_option},#{CP_duration},#{CP_comment},'N',#{MB_num})
+	</insert>
+	
+	<select id="cpList" parameterType="carpool" resultType="carpool">
+		select * from (select a.*, rowNum rn from (select * from carpool
+		<!-- 검색 기능 사용시 -->
+		<!-- keyword에 값이 있으면 where속에 like옵션 사용, 없으면 사용X -->
+		<!-- ${}는 변수, #{}는 값 -->
+		<where>
+			<!-- 검색어가 있을때 -->
+			<if test="keyword!=null and keyword!=''">
+				${search} like '%'||#{keyword}||'%'
+			</if>
+		</where>
+		order by CP_num desc) a) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<select id="getTotal" parameterType="carpool" resultType="integer">
+		select count(*) from (select a.*, rowNum rn from (select c.*, m.MB_nickName from carpool c, member m
+			where c.MB_num = m.MB_num
+			<if test="keyword!=null and keyword!=''">
+				and ${search} like '%'||#{keyword}||'%'
+			</if>
+			order by c.CP_num desc) a)
+	</select>
+	
+	<select id="getMaxNum" resultType="integer">
+		select nvl(max(CP_num),0) + 1 from carpool
+	</select>
+	
+	<select id="select" parameterType="integer" resultType="carpool">
+		select * from carpool where CP_num=#{CP_num}
+	</select>
+	
+	<!-- 예약 내역에서 페이징을 위해 내가 올린 글을 가져오는 로직 - 준호 -->
+	<select id="getTotalMyRvs" parameterType="carpool" resultType="integer">
+		select count(*) from (select a.*, rowNum rn from (select * from carpool where MB_num=#{MB_num}
+			<!-- 검색어가 있을때 -->
+			<if test="keyword!=null and keyword!=''">
+				and ${search} like '%'||#{keyword}||'%'
+			</if>
+		order by CP_num desc) a)
+	</select>
+	
+	<update id="update" parameterType="carpool">
+		update carpool set CP_startPoint=#{CP_startPoint}, CP_endPoint=#{CP_endPoint}, CP_startDate=#{CP_startDate}, CP_startTime=#{CP_startTime}, CP_fee=#{CP_fee}, CP_passNum=#{CP_passNum},
+		CP_gendertype=#{CP_gendertype},CP_option=#{CP_option},CP_duration=#{CP_duration},CP_comment=#{CP_comment} where CP_num=#{CP_num}
+	</update>
+	
+	<update id="delete" parameterType="integer">
+		update carpool set CP_del='Y' where CP_num=#{CP_num}
+	</update>
+	
+	<!-- 예약내역에 내가 올린 글들만 가져옴 -->
+	<select id="myCarpoolList" parameterType="carpool" resultType="carpool">
+		select * from (select a.*, rowNum rn from (select * from carpool where MB_num=#{MB_num}
+			<!-- 검색어가 있을때 -->
+			<if test="keyword!=null and keyword!=''">
+				and ${search} like '%'||#{keyword}||'%'
+			</if>
+		order by CP_num desc) a) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<!-- 관리자가 신고내역의 카풀 게시글 삭제 - 동윤 -->
+	<update id="adminCpDelete" parameterType="integer">
+		update carpool set CP_del='Y' where CP_num=#{CP_num}
+	</update>
+	
+	<!-- 관리자가 신고내역의 카풀 게시글 복구 - 동윤 -->
+	<update id="adminCpRollback" parameterType="integer">
+		update carpool set CP_del='N' where CP_num=#{CP_num}
+	</update>
+	
+	<!-- 관리자 카풀 목록 - 동윤 -->
+	<select id="adminCpList" parameterType="carpool" resultType="carpool">
+		select * from (select a.*, rowNum rn from (select c.*, m.MB_nickName from carpool c, member m
+			where c.MB_num = m.MB_num
+			<if test="keyword!=null and keyword!=''">
+				and ${search} like '%'||#{keyword}||'%'
+			</if>
+			order by c.CP_num desc) a)
+			where rn between #{startRow} and #{endRow}
+	</select>	
+	
+	<!-- 타세요 글 등록한 드라이버가 신청 수락할때마다 CP_passNumNow +1 해줌 -->
+	<update id="updatePassNumNow" parameterType="integer">
+		update carpool set CP_passNumNow = nvl(CP_passNumNow, 0)+1 where CP_num=#{CP_num}
+	</update>
+	
+	<!-- 타세요 목록 - 관리자메인 -->
+	<select id="cpAllList" parameterType="carpool" resultType="carpool">
+		select * from (select a.*, rowNum rn from (select c.*, m.MB_nickName from carpool c, member m
+			where c.MB_num = m.MB_num order by c.CP_num desc) a)
+			where rn between 1 and 6
+	</select>	
+	
+</mapper>

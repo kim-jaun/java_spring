@@ -1,0 +1,176 @@
+@charset "UTF-8";
+
+/* adminPage */
+.admin.container {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.memberMoney a {
+	text-decoration: underline !important;
+}
+
+/* myPage tab */
+.myPage_tabs {
+	display: flex;
+}
+
+.myPage_tabs li {
+	padding: 5px 16px 3px 16px;
+    font-size: 16px;
+}
+
+.myPage_tabs li.active {
+	background: var(--point-color);
+	border-radius: 30px;
+}
+
+.myPage_tabs li.active a {
+	color: #fff !important;
+}
+
+/* 공통 */
+.display_flex {
+	display: flex;
+}
+
+.right {
+	margin-left: auto;
+	text-align: right;
+}
+
+p {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.disp {
+	margin-bottom: 24px;
+	margin-top: 16px;
+}
+
+/* 보유현황 */
+.total_box {
+    width: 100%;
+    background-color: #232323;
+    padding: 24px;
+}
+
+.white .total_box {
+	background-color: #efefef;
+}
+
+.total_top {
+	border-bottom: 1px solid #383838;
+}
+
+.white .total_top {
+	border-bottom: 1px solid #c5c5c5;
+}
+
+.total_top .totalMoney {
+	display: inline-block;
+	font-size: 28px;
+	margin-bottom: 10px;
+}
+
+.total_top span {
+	font-size: 18px;
+	vertical-align: text-bottom;
+}
+
+.total_bottom {
+	padding-top: 12px;
+}
+
+.total_bottom .left p {
+	margin-top: 8px;
+	color: #888 !important;
+}
+
+.total_bottom .right p {
+	margin-top: 8px;
+}
+
+/* 보유현황 리스트 */
+.card_list {
+	margin-top: 36px;
+}
+
+.card_item {
+	padding: 24px;
+	border-bottom: 1px solid #232323;
+	margin-bottom: 24px;
+}
+
+.white .card_item {
+	border-bottom: 1px solid #efefef;
+}
+
+.content {
+	border-bottom: 1px solid #383838;
+	padding-bottom: 8px;
+}
+
+.white .content {
+	border-bottom: 1px solid #c5c5c5;
+}
+
+.name {
+	display: inline-block;
+	font-size: 24px;
+}
+
+.end_price {
+	font-size: 20px;
+}
+
+.time {
+	color: #888 !important;
+	padding-right: 4px;
+	font-size: 14px;
+}
+
+.content_body {
+	padding-top: 16px;
+}
+
+.content_body p {
+	margin-bottom: 8px;
+}
+
+.content_body .left {
+	color: #888 !important;
+}
+
+/* 거래내역 */
+tr {
+	height: 56px;
+	vertical-align: middle;
+}
+
+th:first-child, td:first-child {
+	padding-left: 24px;
+}
+
+.table > :not(:last-child) > :last-child > * {
+    border-bottom-color: #555 !important;
+}
+
+.white .table > :not(:last-child) > :last-child > * {
+    border-bottom-color: #c5c5c5 !important;
+}
+
+.white .table {
+	border-color: #c5c5c5;
+	color: #000;
+}
+
+.stock_name {
+	padding-left: 50px;
+	padding-top: 13px;
+}
+
+.total-text {
+	margin-top: 30px;
+}
